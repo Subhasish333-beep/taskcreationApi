@@ -59,8 +59,21 @@ const loginEmployee = async(req, res) => {
     }
 }
 
+//profile details
+const getProfileDetails = async (req, res) => {
+    try {
+        const profileDetails = await Employee.findAll({where : {id: req.body.userid}, attributes: { exclude: ['password'] }})
+            res.status(200).json({ message: "success", data: profileDetails })
+        }
+    catch (err) {
+        console.log("error", err);
+        res.status(500).json({message:'Something went wrong'})
+    }
+}
+
 
 module.exports = {
     addEmployee,
-    loginEmployee
+    loginEmployee,
+    getProfileDetails
 }

@@ -12,7 +12,10 @@ module.exports = (sequelize, DataTypes) => {
         },
         progress: {
             type: DataTypes.STRING,
-        }
+        },
+        userid: {
+            type: DataTypes.STRING,
+        },
     })
     return Work;
 }

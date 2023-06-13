@@ -4,6 +4,8 @@ const router = require('express').Router();
 
 router.post('/register', authController.addEmployee);
 
-router.post('/login', authController.loginEmployee)
+router.post('/login', authController.loginEmployee);
+
+router.post('/profile', authController.getProfileDetails)
 
 module.exports = router;

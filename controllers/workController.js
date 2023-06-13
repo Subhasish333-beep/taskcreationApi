@@ -11,12 +11,13 @@ const Work = db.work;
 const addWork = async (req, res) => {
     try {
         console.log("request", req.body);
-        const {title, startDate, estimation, progress} = req.body;
+        const {title, startDate, estimation, progress, userid} = req.body;
         let info = {
             title: title,
             startDate: startDate,
             estimation: estimation,
             progress: progress,
+            userid: userid
         }
 
         const existingWork = await Work.findOne({where : {title: title}})
@@ -35,7 +36,20 @@ const addWork = async (req, res) => {
     }
 }
 
+// get all tasks
+
+const getAllWorks = async (req, res) => {
+    try {
+        const existingWork = await Work.findAll({where : {userid: req.body.userid}})
+            res.status(200).json({ message: "success", data: existingWork })
+        }
+    catch (err) {
+        console.log("error", err);
+        res.status(500).json({message:'Something went wrong'})
+    }
+}
 
 module.exports = {
-    addWork
+    addWork,
+    getAllWorks
 }
