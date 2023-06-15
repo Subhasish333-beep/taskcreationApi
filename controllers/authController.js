@@ -12,7 +12,7 @@ const Employee = db.employee;
 
 const addEmployee = async (req, res) => {
     try {
-        console.log("request", req.body);
+        console.log("request", req);
         let info = {
             name: req.body.name,
             age: req.body.age,
@@ -62,7 +62,8 @@ const loginEmployee = async(req, res) => {
 //profile details
 const getProfileDetails = async (req, res) => {
     try {
-        const profileDetails = await Employee.findAll({where : {id: req.body.userid}, attributes: { exclude: ['password'] }})
+        let id = req.params.id;
+        const profileDetails = await Employee.findAll({where : {id: id}, attributes: { exclude: ['password'] }})
             res.status(200).json({ message: "success", data: profileDetails })
         }
     catch (err) {
@@ -72,8 +73,61 @@ const getProfileDetails = async (req, res) => {
 }
 
 
+//update profile
+
+const updateProfile = async(req, res) => {
+    try {
+        let id = req.params.id;
+        const updateProfile = await Employee.update({
+            name: req.body.name,
+            age: req.body.age,
+            position: req.body.position,
+            email: req.body.email,
+        },{
+            where: {id: id}
+        })
+        res.status(200).json({ message: "success"})
+    }
+    catch (err) {
+        console.log("error", err);
+        res.status(500).json({message:'Something went wrong'})
+    }
+}
+
+//change password
+
+const changePassword = async(req, res) => {
+    try {
+        let id = req.body.id;
+        const profileDetails = await Employee.findAll({where : {id: id}})
+        // console.log("profile details", profileDetails[0].password);
+        if(profileDetails[0]?.password === req.body.current) {
+            if(req.body.new === req.body.confirm) {
+                const updateProfile = await Employee.update({
+                   password: req.body.new
+                },{
+                    where: {id: id}
+                })
+                res.status(200).json({ message: "success"})
+            }
+            else {
+                res.status(400).json({message:"password does not match"})
+            }
+        }
+        else {
+            res.status(400).json({message:"password does not match"})
+        }
+       
+    }
+    catch (err) {
+        console.log("error", err);
+        res.status(500).json({message:'Something went wrong'})
+    }
+}
 module.exports = {
     addEmployee,
     loginEmployee,
-    getProfileDetails
+    getProfileDetails,
+    updateProfile,
+    changePassword
 }

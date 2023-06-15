@@ -1,4 +1,6 @@
 const db = require('../models');
+const Sequelize = require('sequelize')
+const Op = Sequelize.Op;
 
 //create main model
 
@@ -49,7 +51,26 @@ const getAllWorks = async (req, res) => {
     }
 }
 
+//search task
+
+const searchTasks = async (req, res) => {
+    try {
+        const searchTask = await Work.findAll({where: {
+            title: {
+              [Op.like]: `%${req.body.search}%`
+            },
+            userid: req.body.userid
+          }})
+            res.status(200).json({ message: "success", data: searchTask })
+        }
+    catch (err) {
+        console.log("error", err);
+        res.status(500).json({message:'Something went wrong'})
+    }
+}
+
 module.exports = {
     addWork,
-    getAllWorks
+    getAllWorks,
+    searchTasks
 }

@@ -6,6 +6,6 @@ router.post('/createtask', workController.addWork);
 
 router.post('/gettasks', workController.getAllWorks);
 
-// router.post('/login', authController.loginEmployee)
+router.post('/search', workController.searchTasks)
 
 module.exports = router;
